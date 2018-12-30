@@ -14,6 +14,7 @@ allprojects {
     group = 'kr.notforme'
 
     repositories {
+        mavenLocal()
         mavenCentral()
     }
 }
@@ -27,6 +28,7 @@ subprojects {
     targetCompatibility = 1.8
 
     dependencies {
+        annotationProcessor('org.projectlombok:lombok:1.18.4')
         implementation('org.springframework.boot:spring-boot-starter-web')
         testImplementation('org.springframework.boot:spring-boot-starter-test')
     }
