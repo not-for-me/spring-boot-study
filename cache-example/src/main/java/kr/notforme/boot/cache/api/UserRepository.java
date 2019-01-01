@@ -7,12 +7,11 @@ import java.util.Map;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+@CacheConfig(cacheNames = "userCache")
 @Repository
 public class UserRepository {
     private static final Map<Integer, User> USER_MAP;
@@ -31,6 +30,7 @@ public class UserRepository {
                        .sorted(Comparator.comparing(User::getId)).collect(Collectors.toList());
     }
 
+    @Cacheable(key = "':user:' + #id")
     public User findOne(int id) {
         simulateWaiting();
         return USER_MAP.getOrDefault(id, new User());
@@ -48,14 +48,4 @@ public class UserRepository {
         final int maxSeconds = 5;
         return random.nextInt(maxSeconds) * 1000;
     }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    static class User {
-        private int id;
-        private String name;
-        private int age;
-    }
-
 }
